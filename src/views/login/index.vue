@@ -28,6 +28,7 @@
             slot="button"
             :time="1000 * 5"
             format="ss s"
+            @finish="isCountDownShow = false"
           />
           <van-button
             v-else
@@ -93,9 +94,10 @@ export default {
         duration: 0
       })
       try {
-        const res = await login(user)
-        console.log('登录成功', res)
+        const { data } = await login(user)
         this.$toast.success('登录成功')
+        this.$store.commit('setUser', data.data)
+        this.$router.back('/my')
       } catch (err) {
         if (err.response.status === 400) {
           this.$toast.fail('手机号或验证码错误')
